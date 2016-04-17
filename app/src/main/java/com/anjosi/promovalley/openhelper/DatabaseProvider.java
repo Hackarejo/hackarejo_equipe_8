@@ -90,6 +90,37 @@ public class DatabaseProvider {
         return  listItens(codigoPro, codigoMercado, false);
     }
 
+    public static Double valores(int codigo){
+        db = helper.getReadableDatabase();
+
+        StringBuffer bf = new StringBuffer();
+        bf.append("SELECT SUM(");
+        bf.append(DataBaseHelper.COLUMN_PRIC_IT);
+        bf.append(") as TOTAL, ");
+
+        bf.append(" count (");
+        bf.append(DataBaseHelper.COLUMN_FK_PROD);
+        bf.append(") as qtd ");
+
+        bf.append(" FROM ");
+        bf.append(DataBaseHelper.TABLE_ITEM);
+        bf.append(" WHERE ");
+        bf.append(DataBaseHelper.COLUMN_FK_MER);
+        bf.append(" = ? ");
+
+        Cursor cursor = db.rawQuery(bf.toString(), new String[]{String.valueOf(codigo)});
+
+        double valor = 0.00;
+        int qtd = 0;
+
+        while(cursor.moveToNext()){
+            valor = cursor.getDouble(cursor.getColumnIndex("TOTAL"));
+            qtd = cursor.getInt(cursor.getColumnIndex("qtd"));
+        }
+
+        return valor / qtd;
+    }
+
     public static List<ItemProductVO> listItens(int codigoPro, int codigoMercado, boolean orderDesc){
         db = helper.getReadableDatabase();
 

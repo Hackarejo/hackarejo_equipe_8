@@ -15,6 +15,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         DatabaseProvider provider = new DatabaseProvider(this);
+
+        DatabaseProvider.valores(2);
     }
 
     public void BtnMercado(View v) {
